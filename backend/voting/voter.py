@@ -8,4 +8,4 @@ class Voter:
 
     def place_vote(self, vote: Vote):
         self.votes.append(vote)
-        Logger().log(f"Vote placed by {self.address} for option {option}")
+        Logger().log(f"Vote placed by {self.cpf} for option {option}")
