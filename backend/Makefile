@@ -1,4 +1,3 @@
-#!/bin/bash
 # Copyright 2022 Cartesi Pte. Ltd.
 #
 # SPDX-License-Identifier: Apache-2.0
@@ -11,28 +10,17 @@
 # CONDITIONS OF ANY KIND, either express or implied. See the License for the
 # specific language governing permissions and limitations under the License.
 
-# note: to run as root, call this script with argument `--run-as-root'`
+MACHINE_DIR := machine
 
-unset CM_OPTS
-while [ $# -gt 0 ]; do
-    arg="$1"
-    shift 1
+.PHONY: clean console
 
-    case "$arg" in
-        --run-as-root)
-            CM_OPTS+=--append-rom-bootargs='single=yes'
-            ;;
-        *)
-            echo invalid option "$arg"
-            ;;
-    esac
-done
+$(MACHINE_DIR):
+	@make -C server
+	@mv server/machine $@
 
-cartesi-machine \
-    --ram-length=128Mi \
-    --rollup \
-    --flash-drive=label:root,filename:dapp.ext2 \
-    --ram-image=linux.bin \
-    --rom-image=rom.bin \
-    -i $CM_OPTS \
-    -- "/bin/sh"
+console:
+	@make -C server console
+
+clean:
+	@make -C server clean
+	@rm -rf $(MACHINE_DIR)
