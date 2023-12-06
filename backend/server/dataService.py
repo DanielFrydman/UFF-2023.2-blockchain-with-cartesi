@@ -1,112 +1,128 @@
 import sqlite3
+import json
 
 
-def increase_votes(candidate_id):
-    query = 'update candidates set votes = votes + 1 where id = "' + candidate_id + '";'
-    return update_data(query)
+SELECT_QUERY = "SELECT * FROM voting_contracts WHERE id = ?"
 
-
-def vote_candidate(user, candidate_id):
-    query = 'insert into voting_info (user, candidate_id) values ("' + user + '", "' + candidate_id + '");'
-    return update_data(query)
-
-
-def voted_candidate(user):
-    query = 'select * from voting_info where user = "' + user + '"'
-    voted = select_data(query)
-    if len(voted) == 0:
-        return {'error': 'You did not vote yet'}
-
-    return voted[0]
 
 def create_voting_contract_table():
     conn = init_conn()
     cur = conn.cursor()
-    sql_query = "SELECT name FROM sqlite_master WHERE type='table';"
-    result = cur.execute(sql_query)
-    tables = result.fetchall()
-    if len(tables) == 0:
-        print("Metadata does not exist")
-        # criar tabela aqui
-        query_create_table = "CREATE TABLE voting_contracts(id text NOT NULL, question text NOT NULL, " \
-                             "options voting_duration_in_seconds start_date end_date votes results" \
-                             "status text NOT NULL DEFAULT waiting_to_start);"
+    cur.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='voting_contracts';")
+    table_exists = cur.fetchone()
+
+    if not table_exists:
+        query_create_table = '''
+            CREATE TABLE voting_contracts (
+                id INTEGER PRIMARY KEY NOT NULL,
+                title TEXT NOT NULL,
+                options TEXT NOT NULL,
+                voting_duration_in_seconds INTEGER NOT NULL,
+                start_date DATETIME DEFAULT NULL,
+                end_date DATETIME DEFAULT NULL,
+                votes TEXT NOT NULL DEFAULT '[]',
+                results TEXT NOT NULL DEFAULT '{}',
+                status TEXT NOT NULL DEFAULT 'waiting_to_start'
+            );
+        '''
         cur.execute(query_create_table)
         conn.commit()
-        conn.close()
+        print("Table 'voting_contracts' created.")
     else:
-        print("Metadata exists")
+        # cur.execute("DROP TABLE IF EXISTS voting_contracts;")
+        # conn.commit()
+        print("Table 'voting_contracts' already exists.")
+
+    conn.close()
 
 
-def create_voting_contract(question, options, voting_duration_in_seconds):
-    query = 'insert into voting_contracts (question, options, voting_duration_in_seconds)' \
-            'values ("' + question + '", "' + options + '", "' + voting_duration_in_seconds + '");'
-    return update_data(query)
+def create_voting_contract(title, options, voting_duration_in_seconds):
+    options_str = json.dumps(options)
+    query = 'INSERT INTO voting_contracts (title, options, voting_duration_in_seconds)' \
+            'VALUES (?, ?, ?)'
+    values = (title, options_str, voting_duration_in_seconds)
+    return update_data(query, values, SELECT_QUERY)
 
 
-def start_voting(voting_contract_id):
-    query = 'update voting_contracts set status = started where id = "' + voting_contract_id + '";'
-    return update_data(query)
+def start_voting_contract(voting_contract_id, start_date, end_date):
+    query = 'UPDATE voting_contracts SET status = "in_progress", start_date = ?, end_date = ? WHERE id = ?'
+    values = (start_date, end_date, voting_contract_id)
+    return update_data(query, values, SELECT_QUERY)
 
 
-def end_voting(voting_contract_id, results):
-    query = 'update voting_contracts set status = finished and results = "' + results + '" where id = "' + voting_contract_id + '";'
-    return update_data(query)
+def end_voting_contract(voting_contract_id, results):
+    results_str = json.dumps(results)
+    query = 'UPDATE voting_contracts SET status = "finished", results = ? WHERE id = ?'
+    values = (results_str, voting_contract_id)
+    return update_data(query, values, SELECT_QUERY)
 
 
-def vote(cpf, option, voting_contract_id):
-    # apendar no array um hash { cpf: '...', option: '... }
-    query = 'update voting_contracts set votes = "' + results + '"'
-    return update_data(query)
+def update_votes(voting_contract_id, votes):
+    votes_str = json.dumps(votes)
+    query = 'UPDATE voting_contracts SET votes = ? WHERE id = ?'
+    values = (votes_str, voting_contract_id)
+    return update_data(query, values)
 
 
-def waiting_to_start_voting_list():
-    query = 'select * from voting_contracts where status="' + 'waiting_to_start' + '"'
-    return select_data(query)
-
-
-def started_voting_list():
-    query = 'select * from voting_contracts where status="' + 'started' + '"'
-    return select_data(query)
-
-
-def finished_voting_list():
-    query = 'select * from voting_contracts where status="' + 'finished' + '"'
-    return select_data(query)
+def voting_list_by_status(status):
+    query = 'SELECT * FROM voting_contracts WHERE status=?'
+    values = (status,)
+    return select_data(query, values)
 
 
 def get_voting_contract_by_id(voting_contract_by_id):
-    query = 'select * from voting_contracts where id="' + voting_contract_by_id + '"'
-    return select_data(query)
+    query = 'SELECT * FROM voting_contracts WHERE id=?'
+    values = (voting_contract_by_id,)
+    result = select_data(query, values)
+    return result[0] if result else None
 
 
-def update_data(query):
+def update_data(query, values=None, select_query=None):
     conn = init_conn()
 
     try:
         with conn:
             cur = conn.cursor()
-            cur.execute(query)
-            return {'message': 'Success'}
+            if values:
+                cur.execute(query, values)
+            else:
+                cur.execute(query)
+
+            voting_contract_id = cur.lastrowid if cur.lastrowid != 0 else values[1]
+
+            if select_query:
+                cur.execute(select_query, (voting_contract_id,))
+                result = cur.fetchone()
+            else:
+                result = None
+
+            return {'message': 'Success', 'result': result}
     except Exception as e:
         result = "EXCEPTION: " + e.__str__()
         print("NOTICE EXCEPTION" + e.__str__())
         return {'error': result}
+    finally:
+        conn.close()
 
 
-def select_data(query):
+def select_data(query, params=None):
     conn = init_conn()
 
     try:
         with conn:
             cur = conn.cursor()
-            result = cur.execute(query)
-            return result.fetchall()
+            if params:
+                cur.execute(query, params)
+            else:
+                cur.execute(query)
+            result = cur.fetchall()
+            return result
     except Exception as e:
         result = "EXCEPTION: " + e.__str__()
         print("NOTICE EXCEPTION" + e.__str__())
         return result
-
+    finally:
+        conn.close()
 
 def init_conn():
     conn = sqlite3.connect('voting_system.db')
