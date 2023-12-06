@@ -36,14 +36,6 @@ def add_notice(message):
     return True
 
 
-def add_report(message):
-    message = to_hex(message)
-    print("Adding report")
-    response_data = requests.post(rollup_server + "/report", json={"payload": message})
-    print(f"Received report status {response_data.status_code} body {response_data.json()}")
-    return True
-
-
 def call_finish():
     print("Finishing")
     response_data = requests.post(rollup_server + "/finish", json={"status": "accept"})
@@ -54,6 +46,7 @@ def call_finish():
 def handle_advance(data):
     body = data
     print(f"Received advance request body {body}")
+    initialize_voting_contract()
 
     payload = bytes.fromhex(body["payload"][2:]).decode()
     print(payload)
@@ -66,13 +59,19 @@ def handle_advance(data):
     payload = json.loads(payload)
 
     if payload['action'] == CREATE_VOTING:
-        result = create_voting(payload['question'], payload['options'], payload['voting_duration_in_seconds'])
+        result = create_voting(payload['title'], payload['options'], payload['voting_duration_in_seconds'])
     elif payload['action'] == START_VOTING:
         result = start_voting(payload['voting_contract_id'])
     elif payload['action'] == END_VOTING:
         result = end_voting(payload['voting_contract_id'])
     elif payload['action'] == VOTE:
         result = vote(payload['cpf'], payload['option'], payload['voting_contract_id'])
+    elif payload['action'] == WAITING_TO_START_VOTING_LIST:
+        result = waiting_to_start_voting_list()
+    elif payload['action'] == IN_PROGRESS_VOTING_LIST:
+        result = in_progress_voting_list()
+    elif payload['action'] == FINISHED_VOTING_LIST:
+        result = finished_voting_list()
     else:
         result = {}
 
@@ -83,32 +82,11 @@ def handle_advance(data):
 
 
 def handle_inspect(data):
-    body = data
-    print(f"Received inspect request body {body}")
-    initialize_voting_contract()
-
-    payload = bytes.fromhex(body["payload"][2:]).decode()
-    print(payload)
-
-    if payload == '':
-        print('Default call')
-        add_report({'message': 'Default request'})
-        return "accept"
-
-    payload = json.loads(payload)
-
-    if payload['action'] == WAITING_TO_START_VOTING_LIST:
-        result = waiting_to_start_voting_list()
-    elif payload['action'] == STARTED_VOTING_LIST:
-        result = started_voting_list()
-    elif payload['action'] == FINISHED_VOTING_LIST:
-        result = finished_voting_list()
-    else:
-        result = {}
-
-    print(result)
-    print("Result type: " + type(result).__name__)
-    add_report(json.dumps(result))
+    logger.info(f"Received inspect request data {data}")
+    logger.info("Adding report")
+    report = {"payload": data["payload"]}
+    response_data = requests.post(rollup_server + "/report", json=report)
+    logger.info(f"Received report status {response_data.status_code}")
     return "accept"
 
 
