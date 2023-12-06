@@ -111,7 +111,7 @@ docker-compose -f docker-compose.yml -f docker-compose-host.yml down -v
 TO DO
 
 
-## Interacting with the application (By terminal)
+## Interacting with the application (By Terminal)
 
 Go to a separate terminal window, switch to the `contracts` directory, and run `yarn`:
 
@@ -165,5 +165,5 @@ npx hardhat --network localhost voting:addInput --input '{ "action":"FINISHED_VO
 Finally, note that you can check the available options for all Hardhat tasks using the `--help` switch:
 
 ```shell
-$ npx hardhat --help
+npx hardhat --help
 ```
