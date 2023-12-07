@@ -1,0 +1,101 @@
+<div class="wrapper">
+    <div class="content-wrapper">
+        <section class="content">
+            <div class="container-fluid">
+                <section class="content-header mb-5">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-7">
+                                <h1>Sistema de Votação</h1>
+                            </div>
+                            <div class="col-5">
+                                <nav class="navbar navbar-expand-lg">                                  
+                                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                      <ul class="navbar-nav ml-auto">
+                                        <li class="nav-item">
+                                            <a class="nav-link" routerLink="/home">Pagina Inicial</a>
+                                        </li>
+                                        <li class="nav-item">
+                                          <a class="nav-link" routerLink="/criar-votacao">Criar Votação</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" routerLink="/votacao-andamento">Votações em Andamento</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" routerLink="/votacao-finalizada">Votações Finalizadas</a>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </nav>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="container-fluid">
+
+                    <div class="modal fade" id="modalBuceta" tabindex="-1" role="dialog"
+                      aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-sm" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" codigo="exampleModalLabel">Dados Votação</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <div class="row col-12">
+                              <h6 for="">Dados Xereca</h6>
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" >Começar</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row mb-5">
+                        <div class="col-12" style="text-align: center;">
+                            <h3>Votações Aguardando Inicio</h3>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3">
+
+                        </div>
+                        <div class="col-6" style="text-align: center;">
+                            <table id="tblData" class="table table-bordered table-hover table-sm">
+                                <thead>
+                                    <tr>
+                                        <th class="left nowrap">
+                                            Votação
+                                        </th>
+                                        <th style="width: 4rem;" class="center nowrap">
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="left">Xereca</td>
+                                        <td style="width: 4rem;" class="center">
+                                            <a>
+                                                <i class="bi bi-pencil" style="color: cornflowerblue;" data-toggle="modal" data-target="#modalBuceta"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-3">
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+</div>

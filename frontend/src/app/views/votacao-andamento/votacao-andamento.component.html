@@ -1,0 +1,123 @@
+<div class="wrapper">
+    <div class="content-wrapper">
+        <section class="content">
+            <div class="container-fluid">
+                <section class="content-header mb-5">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-7">
+                                <h1>Sistema de Votação</h1>
+                            </div>
+                            <div class="col-5">
+                                <nav class="navbar navbar-expand-lg">                                  
+                                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                      <ul class="navbar-nav ml-auto">
+                                        <li class="nav-item">
+                                            <a class="nav-link" routerLink="/home">Pagina Inicial</a>
+                                        </li>
+                                        <li class="nav-item">
+                                          <a class="nav-link" routerLink="/criar-votacao">Criar Votação</a>
+                                        </li>
+                                        <li class="nav-item">
+                                          <a class="nav-link" routerLink="/votacao-iniciar">Votações Aguardando Inicio</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" routerLink="/votacao-finalizada">Votações Finalizadas</a>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </nav>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="container-fluid">
+
+                    <div class="modal fade" id="modalVoto" tabindex="-1" role="dialog"
+                      aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-sm" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" codigo="exampleModalLabel">Votação: Xereca</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <div class="row col-12 mb-2">
+                                <label for="xereca1">CPF</label>
+                                <input type="text" id="xereca1" class="form-control">
+                            </div>
+                            <div class="row col-12">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input">
+                                    <label class="custom-control-label ml-3" for="customRadio1">Opção 1</label>
+                                  </div>
+                                  <div class="custom-control custom-radio">
+                                    <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
+                                    <label class="custom-control-label ml-3" for="customRadio2">Opção 2</label>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" >Votar</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row mb-5">
+                        <div class="col-12" style="text-align: center;">
+                            <h3>Votações Andamento</h3>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3">
+
+                        </div>
+                        <div class="col-6" style="text-align: center;">
+                            <table id="tblData" class="table table-bordered table-hover table-sm">
+                                <thead>
+                                    <tr>
+                                        <th class="left nowrap">
+                                            Votação
+                                        </th>
+                                        <th style="width: 4rem;" class="left nowrap">
+                                            Tempo Duração
+                                        </th>
+                                        <th style="width: 4rem;" class="center nowrap">
+                                        </th>
+                                        <th style="width: 4rem;" class="center nowrap">
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="left">Xereca</td>
+                                        <td class="left" style="width: 4rem;">3:00</td>
+                                        <td style="width: 4rem;" class="center">
+                                            <a>
+                                                <i class="bi bi-check-circle" style="color: green;" data-toggle="modal" data-target="#modalVoto"></i>
+                                            </a>
+                                        </td>
+                                        <td style="width: 4rem;" class="center">
+                                            <a>
+                                                <i class="bi bi-clipboard2-check" style="color: grey;" data-toggle="modal" data-target="#modalFinal"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-3">
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+</div>

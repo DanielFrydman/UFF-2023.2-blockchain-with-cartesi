@@ -1,0 +1,101 @@
+<div class="wrapper">
+    <div class="content-wrapper">
+        <section class="content">
+            <div class="container-fluid">
+                <section class="content-header mb-5">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-7">
+                                <h1>Sistema de Votação</h1>
+                            </div>
+                            <div class="col-5">
+                                <nav class="navbar navbar-expand-lg">                                  
+                                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                      <ul class="navbar-nav ml-auto">
+                                        <li class="nav-item">
+                                            <a class="nav-link" routerLink="/home">Pagina Inicial</a>
+                                        </li>
+                                        
+                                        <li class="nav-item">
+                                          <a class="nav-link" routerLink="/votacao-iniciar">Votações Aguardando Inicio</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" routerLink="/votacao-andamento">Votações em Andamento</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" routerLink="/votacao-finalizada">Votações Finalizadas</a>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </nav>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="container-fluid">
+
+
+
+                    <div class="row mb-5">
+                        <div class="col-12" style="text-align: center;">
+                            <h3>Criar Votação</h3>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <form>
+                                <div class="form-group">
+                                  <label for="xereca1">Titulo da Votação</label>
+                                  <input type="text" id="xereca1" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                  <label for="xereca2">Tempo de Duração (Em Segundos)</label>
+                                  <input type="number" id="xereca2" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <label for="xereca3">Opções</label>
+                                        <input type="text" id="xereca3" class="form-control" #textoXereca>
+                                        <div class="input-group-append">
+                                          <button class="btn btn-sm btn-secondary" type="button" (click)="addOpcao(textoXereca)">Adicionar</button>
+                                        </div>
+                                      </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Salvar</button>
+                              </form>
+                        </div>
+                        <div class="col-3">
+
+                        </div>
+                        <div class="col-3">
+                            <table id="tblData" class="table table-bordered table-hover table-sm mt-4">
+                                <thead>
+                                    <tr>
+                                        <th class="left nowrap">
+                                            Opções
+                                        </th>
+                                        <th style="width: 4rem;" class="center nowrap">
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of listaOpcao; let i = index">
+                                        <td class="left">{{item}}</td>
+                                        <td style="width: 4rem;" class="center">
+                                            <a> 
+                                                <i class="bi bi-trash" style="color: red;" (click)="removeOpcao(i)"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+</div>
