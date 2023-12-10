@@ -47,7 +47,7 @@ git clone git@github.com:DanielFrydman/UFF-2023.2-blockchain-with-cartesi.git
 Then, build the back-end for the voting example:
 
 ```shell
-cd UFF-2023.2-blockchain-with-cartesi/
+cd UFF-2023.2-blockchain-with-cartesi/backend/
 make machine
 ```
 
@@ -65,7 +65,7 @@ docker-compose -f docker-compose.yml -f docker-compose-host.yml up --build
 The server is written in Python, so make sure you have python3 installed. In order to start the server, run the following commands in a dedicated terminal:
 
 ```shell
-cd backend/server/
+cd UFF-2023.2-blockchain-with-cartesi/backend/server/
 python3 -m venv .env
 . .env/bin/activate
 pip install -r requirements.txt
@@ -107,8 +107,9 @@ docker-compose -f docker-compose.yml -f docker-compose-host.yml down -v
 
 
 ## Interacting with the application (By Angular Frontend)
-
 TO DO
+
+Edit: Unfortunately, we weren't able to do this in time...
 
 
 ## Interacting with the application (By Terminal)
@@ -116,7 +117,7 @@ TO DO
 Go to a separate terminal window, switch to the `contracts` directory, and run `yarn`:
 
 ```shell
-cd backend/contracts/
+cd UFF-2023.2-blockchain-with-cartesi/backend/contracts/
 yarn
 ```
 
