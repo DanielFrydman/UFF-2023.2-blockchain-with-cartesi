@@ -59,6 +59,7 @@ During the development of an application, it is crucial to have the ability to t
 To run the environment in host mode, follow these steps:
 
 ```shell
+cd UFF-2023.2-blockchain-with-cartesi/backend/
 docker-compose -f docker-compose.yml -f docker-compose-host.yml up --build
 ```
 
@@ -102,6 +103,7 @@ INFO:__main__:Sending finish
 If you need to stop the containers and remove any associated volumes, run this:
 
 ```shell
+cd UFF-2023.2-blockchain-with-cartesi/backend/
 docker-compose -f docker-compose.yml -f docker-compose-host.yml down -v
 ```
 
@@ -119,6 +121,12 @@ Go to a separate terminal window, switch to the `contracts` directory, and run `
 ```shell
 cd UFF-2023.2-blockchain-with-cartesi/backend/contracts/
 yarn
+```
+
+All the comands bellow has to be inside contracts folter:
+
+```shell
+cd UFF-2023.2-blockchain-with-cartesi/backend/contracts/
 ```
 
 If you want to create a voting, use this query:
