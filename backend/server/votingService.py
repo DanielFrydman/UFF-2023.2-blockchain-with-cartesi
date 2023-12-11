@@ -1,3 +1,4 @@
+import ast
 import json
 from collections import Counter
 from datetime import datetime, timedelta
@@ -71,7 +72,7 @@ def _is_voting_period_valid(voting_contract):
         return False
 
 def _option_exists(voting_contract, option):
-    return any(voting_option == option for voting_option in voting_contract.get('options', []))
+    return any(voting_option == option for voting_option in ast.literal_eval(voting_contract.get('options', [])))
 
 def _cpf_has_voted(voting_contract, cpf):
     return any(vote['cpf'] == cpf for vote in _votes(voting_contract))
